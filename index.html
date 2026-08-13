@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Substrata Geosciences — Geophysical Testing & Geotechnical Monitoring</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* =====================================================================
+     EDIT ME: change the company name in one place.
+     ===================================================================== */
+  :root{
+    --bg:        #15181A;   /* basalt / bedrock */
+    --bg-raise:  #1D2123;
+    --paper:     #EDE8DC;   /* survey-paper off-white */
+    --paper-dim: #B9B4A6;
+    --line:      #33383B;
+
+    /* resistivity-scale accent ramp, low to high */
+    --res-1: #3E7CA6;  /* conductive / wet */
+    --res-2: #4F8F73;
+    --res-3: #C9A227;
+    --res-4: #C1602E;  /* resistive / dry-rock */
+
+    --serif: 'IBM Plex Serif', Georgia, serif;
+    --sans:  'IBM Plex Sans', -apple-system, sans-serif;
+    --mono:  'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:var(--sans);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  img,svg{display:block; max-width:100%;}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(21,24,26,0.88);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  header .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:64px;
+  }
+  .brand{
+    font-family:var(--mono); font-size:15px; letter-spacing:0.04em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand .mark{
+    width:18px; height:18px; flex:none;
+  }
+  nav{display:flex; gap:28px; font-size:14px;}
+  nav a{
+    color:var(--paper-dim); text-decoration:none;
+    transition:color .15s ease;
+  }
+  nav a:hover{color:var(--paper);}
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    padding:96px 0 72px;
+    overflow:hidden;
+    border-bottom:1px solid var(--line);
+  }
+  .hero .wrap{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center;
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--res-3);
+    margin-bottom:18px;
+  }
+  h1{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(32px, 4.4vw, 52px);
+    line-height:1.08; letter-spacing:-0.01em;
+    color:var(--paper);
+  }
+  .hero p.lede{
+    margin-top:20px; font-size:17px; color:var(--paper-dim);
+    max-width:46ch;
+  }
+  .hero .ctas{margin-top:32px; display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--sans); font-weight:600; font-size:14px;
+    padding:12px 22px; border-radius:2px; text-decoration:none;
+    display:inline-block; border:1px solid transparent;
+  }
+  .btn.primary{background:var(--paper); color:var(--bg);}
+  .btn.ghost{border-color:var(--line); color:var(--paper);}
+  .btn.primary:hover{background:var(--res-3);}
+  .btn.ghost:hover{border-color:var(--paper-dim);}
+
+  /* signature graphic: layered strata + resistivity ramp with electrode line */
+  .strata-fig{position:relative;}
+  .strata-fig svg{width:100%; height:auto;}
+  .strata-fig .cap{
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim);
+    margin-top:10px; letter-spacing:0.02em;
+  }
+
+  /* ---------- section shell ---------- */
+  section{padding:80px 0; border-bottom:1px solid var(--line);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{max-width:60ch; margin-bottom:44px;}
+  .section-head .eyebrow{margin-bottom:12px;}
+  h2{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(24px,3vw,32px); color:var(--paper);
+  }
+  .section-head p{margin-top:14px; color:var(--paper-dim); font-size:15.5px;}
+
+  /* ---------- about strip ---------- */
+  .about-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:32px;}
+  .about-grid .stat{
+    border-left:2px solid var(--res-3); padding-left:16px;
+  }
+  .about-grid .stat .num{font-family:var(--serif); font-size:26px;}
+  .about-grid .stat .lbl{font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:4px;}
+
+  /* ---------- services ---------- */
+  .tier{margin-bottom:52px;}
+  .tier:last-child{margin-bottom:0;}
+  .tier-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:20px;
+  }
+  .tier-head h3{
+    font-family:var(--serif); font-size:19px; font-weight:500; color:var(--paper);
+  }
+  .tier-head .tier-note{font-family:var(--mono); font-size:12px; color:var(--paper-dim);}
+
+  .svc-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+    gap:1px; background:var(--line);
+    border:1px solid var(--line);
+  }
+  .svc-card{
+    background:var(--bg-raise); padding:22px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .svc-card .top-row{display:flex; justify-content:space-between; align-items:flex-start; gap:10px;}
+  .svc-card h4{font-family:var(--sans); font-weight:600; font-size:15px; color:var(--paper);}
+  .svc-card p{font-size:13.5px; color:var(--paper-dim);}
+  .status{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    padding:3px 8px; border-radius:2px; white-space:nowrap; flex:none;
+  }
+  .status.live{background:rgba(79,143,115,0.18); color:#7CC4A4; border:1px solid rgba(124,196,164,0.35);}
+  .status.building{background:rgba(201,162,39,0.16); color:#E0BE55; border:1px solid rgba(224,190,85,0.35);}
+  .status.planned{background:rgba(255,255,255,0.05); color:var(--paper-dim); border:1px solid var(--line);}
+
+  /* ---------- roadmap ---------- */
+  .phases{display:flex; flex-direction:column;}
+  .phase{
+    display:grid; grid-template-columns:64px 1fr; gap:20px;
+    padding:22px 0; border-top:1px solid var(--line);
+  }
+  .phase:first-child{border-top:none;}
+  .phase .n{font-family:var(--serif); font-size:26px; color:var(--res-3);}
+  .phase h4{font-family:var(--sans); font-weight:600; font-size:15.5px; margin-bottom:6px;}
+  .phase p{font-size:14px; color:var(--paper-dim); max-width:62ch;}
+
+  /* ---------- about ---------- */
+  .about-person{
+    display:grid; grid-template-columns:180px 1fr; gap:36px; align-items:start;
+  }
+  .avatar{
+    width:180px; height:180px; border:1px solid var(--line);
+    background:var(--bg-raise);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--serif); font-size:44px; color:var(--res-3);
+  }
+  .about-person .role{
+    font-family:var(--mono); font-size:12px; color:var(--paper-dim);
+    letter-spacing:0.04em; margin-bottom:10px;
+  }
+  .about-person h2{margin-bottom:14px;}
+  .about-person p{color:var(--paper-dim); font-size:15px; max-width:60ch;}
+  .about-person p + p{margin-top:12px;}
+  .credentials{
+    display:flex; flex-wrap:wrap; gap:8px; margin-top:20px;
+  }
+  .credentials span{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.03em;
+    border:1px solid var(--line); padding:5px 10px; color:var(--paper-dim);
+  }
+
+  /* ---------- portfolio ---------- */
+  .portfolio-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr));
+    gap:1px; background:var(--line); border:1px solid var(--line);
+  }
+  .proj-card{
+    background:var(--bg-raise); padding:24px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .proj-card .proj-tag{
+    font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--res-3);
+  }
+  .proj-card h4{font-family:var(--sans); font-weight:600; font-size:15.5px; color:var(--paper);}
+  .proj-card p{font-size:13.5px; color:var(--paper-dim);}
+  .proj-card .tools{
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim);
+    border-top:1px solid var(--line); padding-top:10px; margin-top:auto;
+  }
+
+  /* ---------- contact ---------- */
+  .contact-box{
+    background:var(--bg-raise); border:1px solid var(--line);
+    padding:40px; display:flex; justify-content:space-between; align-items:center; gap:24px; flex-wrap:wrap;
+  }
+  .contact-box h2{font-size:22px;}
+  .contact-box p{color:var(--paper-dim); margin-top:8px; font-size:14.5px;}
+
+  footer{padding:32px 0; text-align:center;}
+  footer p{font-family:var(--mono); font-size:11.5px; color:var(--paper-dim);}
+
+  @media(max-width:820px){
+    .hero .wrap{grid-template-columns:1fr;}
+    .about-grid{grid-template-columns:1fr; gap:20px;}
+    nav{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 18 18"><rect width="18" height="18" fill="none"/><path d="M0 13 L4 9 L8 12 L12 5 L18 8" stroke="#C9A227" stroke-width="1.6" fill="none"/></svg>
+      SUBSTRATA GEOSCIENCES
+    </div>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Geophysical testing · Geotechnical monitoring</div>
+      <h1>We read the ground before it moves — and watch it after.</h1>
+      <p class="lede">Independent geophysical investigation and geotechnical monitoring services, built for slopes, foundations, and infrastructure corridors that can't afford to be surprised.</p>
+      <div class="ctas">
+        <a href="#services" class="btn primary">See current services</a>
+        <a href="#contact" class="btn ghost">Get in touch</a>
+      </div>
+    </div>
+    <div class="strata-fig">
+      <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- electrode / survey line -->
+        <line x1="20" y1="30" x2="400" y2="30" stroke="#5A5F63" stroke-width="1"/>
+        <g fill="#EDE8DC">
+          <circle cx="40" cy="30" r="3"/><circle cx="90" cy="30" r="3"/>
+          <circle cx="140" cy="30" r="3"/><circle cx="190" cy="30" r="3"/>
+          <circle cx="240" cy="30" r="3"/><circle cx="290" cy="30" r="3"/>
+          <circle cx="340" cy="30" r="3"/><circle cx="380" cy="30" r="3"/>
+        </g>
+        <!-- resistivity inversion bands (schematic) -->
+        <defs>
+          <linearGradient id="resistivity" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3E7CA6"/>
+            <stop offset="35%" stop-color="#4F8F73"/>
+            <stop offset="65%" stop-color="#C9A227"/>
+            <stop offset="100%" stop-color="#C1602E"/>
+          </linearGradient>
+        </defs>
+        <path d="M20,60 Q120,90 220,70 T400,95 L400,150 Q300,130 200,150 T20,130 Z" fill="url(#resistivity)" opacity="0.85"/>
+        <path d="M20,130 Q140,155 240,140 T400,150 L400,210 Q280,190 160,205 T20,195 Z" fill="#2B3234" opacity="0.9"/>
+        <path d="M20,195 Q160,215 260,200 T400,210 L400,270 L20,270 Z" fill="#1A1D1F"/>
+        <!-- inclinometer / borehole schematic -->
+        <line x1="250" y1="30" x2="250" y2="250" stroke="#EDE8DC" stroke-width="1.4" stroke-dasharray="3 4"/>
+        <circle cx="250" cy="30" r="3" fill="#EDE8DC"/>
+        <text x="256" y="120" font-family="IBM Plex Mono" font-size="9" fill="#B9B4A6">borehole</text>
+        <text x="256" y="132" font-family="IBM Plex Mono" font-size="9" fill="#B9B4A6">inclinometer</text>
+      </svg>
+      <div class="cap">Schematic — ERT resistivity cross-section with a borehole inclinometer for calibration</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="about-person">
+      <div class="avatar">A</div>
+      <div>
+        <div class="role">FOUNDER — GEOTECHNICAL &amp; GEOPHYSICAL ENGINEER</div>
+        <h2>Hi, I'm Alok.</h2>
+        <p>I'm a geotechnical engineer with an M.Tech in Geotechnical Engineering from IIT Roorkee, currently practicing foundation engineering and ground–structure interaction at an international infrastructure consultancy. Substrata Geosciences is where I'm building the practice I couldn't find off-the-shelf: one that treats geophysical imaging and geotechnical monitoring as a single discipline, not two separate vendors.</p>
+        <p>My background is in subsurface characterization, pile foundation design, and geohazard assessment. Geotechnical instrumentation and automated monitoring are the newer half of that combination — I'm building that expertise deliberately and in public, which is why every service on this page is labelled by what stage it's actually at.</p>
+        <div class="credentials">
+          <span>M.Tech, Geotechnical Engineering — IIT Roorkee</span>
+          <span>PLAXIS · GeoStudio · RS2 · FB-Multipier</span>
+          <span>QGIS · ArcGIS · Python</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Why this combination</div>
+      <h2>Geophysics tells you the shape of the problem. Monitoring tells you how fast it's changing.</h2>
+      <p>Most firms specialise in one or the other — geophysical survey houses that hand over a report, or instrumentation vendors that sell hardware. We combine subsurface imaging with the point-sensor data needed to validate it, because a resistivity model without ground-truthed monitoring is a guess, and a piezometer reading without spatial context is a single point on an unknown surface.</p>
+    </div>
+    <div class="about-grid">
+      <div class="stat"><div class="num">ERT · MASW · GPR</div><div class="lbl">CORE GEOPHYSICAL METHODS</div></div>
+      <div class="stat"><div class="num">IS 14458 · NDMA</div><div class="lbl">REFERENCE FRAMEWORKS FOLLOWED</div></div>
+      <div class="stat"><div class="num">Foundations → Slopes</div><div class="lbl">APPLICATION RANGE</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we offer</div>
+      <h2>Services, honestly labelled</h2>
+      <p>Every service below is tagged by where it actually stands today — not a wishlist. This list grows as capability grows; edit the <code>SERVICES</code> array in the page source to update it yourself.</p>
+    </div>
+    <div id="service-tiers"></div>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Selected work</div>
+      <h2>Portfolio</h2>
+      <p>Project experience that the services above draw on. This list grows as new work — Substrata's or otherwise attributable — gets added; edit the <code>PROJECTS</code> array in the page source to update it.</p>
+    </div>
+    <div id="portfolio-grid" class="portfolio-grid"></div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Building this in public</div>
+      <h2>How the practice is growing</h2>
+    </div>
+    <div class="phases">
+      <div class="phase">
+        <div class="n">01</div>
+        <div><h4>Interpretation & consulting first</h4><p>Geophysical data review, monitoring plan design, and geohazard assessment — delivered without needing owned field equipment.</p></div>
+      </div>
+      <div class="phase">
+        <div class="n">02</div>
+        <div><h4>Field geophysics via partnered/rented instrumentation</h4><p>ERT, MASW and GPR surveys delivered with rented kit or a field partner while a track record is built.</p></div>
+      </div>
+      <div class="phase">
+        <div class="n">03</div>
+        <div><h4>Instrumentation & automated monitoring</h4><p>Piezometers, inclinometers, and telemetry-linked dataloggers — the current learning frontier.</p></div>
+      </div>
+      <div class="phase">
+        <div class="n">04</div>
+        <div><h4>Integrated slope early-warning systems</h4><p>Combined geophysical + geotechnical + rainfall-threshold monitoring for landslide-prone corridors.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <div>
+        <h2>Have a site that needs reading?</h2>
+        <p>Open to consulting enquiries, collaboration, and early pilot projects.</p>
+      </div>
+      <a href="mailto:youremail@example.com" class="btn primary">youremail@example.com</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap"><p>SUBSTRATA GEOSCIENCES — GEOPHYSICAL TESTING &amp; GEOTECHNICAL MONITORING</p></div>
+</footer>
+
+<script>
+/* =====================================================================
+   EDIT ME: this is the only place you should need to touch as you
+   add real services. status: "live" | "building" | "planned"
+   ===================================================================== */
+const SERVICES = [
+  {
+    tier: "Geophysical Site Characterization",
+    note: "core strength today",
+    items: [
+      { name: "Electrical Resistivity Tomography (ERT)", desc: "Subsurface stratigraphy, moisture and seepage mapping, slip-surface delineation.", status: "live" },
+      { name: "Seismic Refraction / MASW", desc: "Bedrock depth, rippability assessment, Vs30 for seismic site classification.", status: "building" },
+      { name: "Ground Penetrating Radar (GPR)", desc: "Shallow voids, utility mapping, foundation and pavement checks.", status: "planned" },
+    ]
+  },
+  {
+    tier: "Geotechnical Instrumentation & Monitoring",
+    note: "active learning track",
+    items: [
+      { name: "Piezometers (VW & standpipe)", desc: "Pore pressure monitoring for slopes, embankments and excavations.", status: "building" },
+      { name: "Inclinometers & extensometers", desc: "Subsurface lateral movement and ground deformation tracking.", status: "building" },
+      { name: "Automated dataloggers & telemetry", desc: "Cloud-linked acquisition and threshold-based alerting.", status: "planned" },
+    ]
+  },
+  {
+    tier: "Slope & Landslide Monitoring",
+    note: "the differentiated niche",
+    items: [
+      { name: "Time-lapse (4D) ERT for slope stability", desc: "Repeat resistivity surveys to track moisture-driven instability over time.", status: "planned" },
+      { name: "Geophysical–geotechnical slip-surface validation", desc: "Cross-checking resistivity models against shear-strength and pore-pressure data.", status: "planned" },
+      { name: "Rainfall-threshold early warning design", desc: "IMP and alert-logic design referencing NDMA / IS 14458 guidance.", status: "planned" },
+    ]
+  },
+  {
+    tier: "Interpretation, Consulting & Reporting",
+    note: "available now, no field equipment required",
+    items: [
+      { name: "Third-party geophysical data interpretation", desc: "Independent review and interpretation of ERT, seismic or GPR datasets collected by others.", status: "live" },
+      { name: "Instrumentation Monitoring Plans (IMP)", desc: "Design of monitoring schemes for EPC contractors and site teams.", status: "live" },
+      { name: "Geohazard risk assessment", desc: "Desk and field-based landslide/geohazard risk studies using GIS and slope-stability tools.", status: "live" },
+    ]
+  }
+];
+
+/* =====================================================================
+   EDIT ME: portfolio projects. Add new ones as they happen —
+   tag is a short category label, tools is a comma-separated string.
+   ===================================================================== */
+const PROJECTS = [
+  {
+    tag: "Foundation Engineering",
+    name: "Mumbai Coastal Road — Package E",
+    desc: "Rock-socketed pile foundation design across variable rock-head conditions, with lateral and axial soil-structure interaction analysis and Python batch scripting to automate the curve generation.",
+    tools: "FB-Multipier · t-z / Q-z / p-y curves · Python"
+  },
+  {
+    tag: "Foundation Engineering",
+    name: "Hyperscale Data Center Foundations",
+    desc: "Foundation design for a hyperscale data center under a strict sub-10mm differential settlement criterion, following IS 2911 and IS 8009.",
+    tools: "PLAXIS · IS 2911 · IS 8009"
+  },
+  {
+    tag: "Foundation Engineering",
+    name: "Muriganga Bridge",
+    desc: "Pile design and verification through bi-directional (O-cell) static load testing.",
+    tools: "O-cell load testing · Pile design"
+  },
+  {
+    tag: "Geohazard Assessment",
+    name: "Highway Landslide Risk Assessment",
+    desc: "Slope stability and landslide risk mapping along a highway corridor, combining GIS-based hazard mapping with numerical slope analysis.",
+    tools: "QGIS · ArcGIS · RS2"
+  },
+  {
+    tag: "Research",
+    name: "Micropiles for Landslide Risk Reduction",
+    desc: "M.Tech dissertation investigating micropile applications for landslide mitigation.",
+    tools: "M.Tech Dissertation, IIT Roorkee"
+  },
+  {
+    tag: "Research",
+    name: "Joshimath Sinking — Field Geohazard Assessment",
+    desc: "Field-based geohazard assessment work examining the subsidence and slope-instability processes behind the Joshimath sinking event.",
+    tools: "Field investigation · Geohazard assessment"
+  }
+];
+
+function renderPortfolio(){
+  const root = document.getElementById('portfolio-grid');
+  root.innerHTML = PROJECTS.map(p => `
+    <div class="proj-card">
+      <div class="proj-tag">${p.tag}</div>
+      <h4>${p.name}</h4>
+      <p>${p.desc}</p>
+      <div class="tools">${p.tools}</div>
+    </div>
+  `).join('');
+}
+
+function render(){
+  const root = document.getElementById('service-tiers');
+  root.innerHTML = SERVICES.map(tier => `
+    <div class="tier">
+      <div class="tier-head">
+        <h3>${tier.tier}</h3>
+        <span class="tier-note">${tier.note}</span>
+      </div>
+      <div class="svc-grid">
+        ${tier.items.map(svc => `
+          <div class="svc-card">
+            <div class="top-row">
+              <h4>${svc.name}</h4>
+              <span class="status ${svc.status}">${svc.status}</span>
+            </div>
+            <p>${svc.desc}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+render();
+renderPortfolio();
+</script>
+
+</body>
+</html>
